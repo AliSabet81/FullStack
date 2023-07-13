@@ -1,21 +1,28 @@
 import { Router } from "express";
-import { User } from "./../../models/index.mjs";
-
+import { SignUpSchema, User } from "./../../models/index.mjs";
+import bcript from "bcryptjs";
+import { validate } from "../../helpers/index.mjs";
 export const AuthRoutes = Router();
 
-AuthRoutes.post('/register', async(req,res)=>{
-    if (!req.body.username) return res.status(400).json({
-        msg:'username is required'
-    })
 
-    const isUser = User.findOne({email:req.body.email})
-    if (isUser) return res.status(400).json({
-        msg:'username with this email alredy exists!'
-    })
 
-    const user = await new User({...req.body})
-    await user.save()
+AuthRoutes.post("/sign-up", validate(SignUpSchema), async (req, res) => {
+  const isUser = await User.findOne({ email: req.body.email });
+  if (isUser)
+    return res.status(400).json({
+      msg: "username with this email alredy exists!",
+    });
+  try {
+    const password = await bcript.genSalt(10);
+    const hashed = await bcript.hash(process.env.SECRET_KEY, password);
+    const { repeatPassword, ...restBody } = req.body;
+    const user = await new User({ ...restBody, password: hashed });
+    await user.save();
     res.status(201).json({
-        msg:"user created successfully"
-    })
-})
+      user,
+      msg: "user created successfully",
+    });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});

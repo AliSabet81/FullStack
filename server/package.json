@@ -11,10 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "app-root-path": "^3.1.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongoose": "^7.3.1"
+    "mongoose": "^7.3.1",
+    "yup": "^1.2.0"
   },
   "type": "module",
   "devDependencies": {
