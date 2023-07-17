@@ -1,10 +1,7 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ISignUpData, signUpservice } from "@/api/services/auth";
-const inter = Inter({ subsets: ["latin"] });
 
 const SignUpSchema = yup.object({
   username: yup.string(),
@@ -19,7 +16,7 @@ export default function SignUp() {
   });
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
+      className={`flex min-h-screen flex-col items-center justify-between p-24 `}>
       <form
         onSubmit={handleSubmit(async (data) => {
           const res = await signUpservice(data);

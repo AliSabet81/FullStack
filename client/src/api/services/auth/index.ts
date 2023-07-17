@@ -7,7 +7,16 @@ export interface ISignUpData {
   repeatPassword: string;
 }
 
+export interface ISignInData {
+  email: string;
+  password: string;
+}
+
 export const signUpservice = async(data: ISignUpData) => {
-  const res = await instance.post("/sign-up", data);
+  const res = await instance.post("/auth/sign-up", data);
+  return res.data;
+}
+export const signInservice = async(data: ISignInData) => {
+  const res = await instance.post("/auth/sign-in", data);
   return res.data;
 }

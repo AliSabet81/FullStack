@@ -10,6 +10,13 @@ export const SignUpSchema = yup.object({
   }),
 });
 
+export const SignInSchema = yup.object({
+  body: yup.object({
+    email: yup.string().required(),
+    password: yup.string().required(),
+  }),
+});
+
 const UserSchema = new Schema({
   username: {
     type: String,
