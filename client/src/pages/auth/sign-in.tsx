@@ -9,6 +9,7 @@ const SignUpSchema = yup.object({
 });
 
 export default function SignIn() {
+  
   const { register, handleSubmit } = useForm<ISignInData>({
     resolver: yupResolver(SignUpSchema),
   });
