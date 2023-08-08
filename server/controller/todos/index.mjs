@@ -27,3 +27,45 @@ export const AddTodoController = async (req, res) => {
     console.log(err);
   }
 };
+
+export const GetTodoController = async (req,res) => {
+  try {
+    const todos = await Todo.find()
+    res.status(200).json({data:todos})
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const UpdateTodoController = async (req,res) => {
+  try {
+    const params = req.params
+    const UpdatedTodo = await Todo.findByIdAndUpdate(params.id,req.body)
+    res.status(200).json({data:UpdatedTodo})
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const DeleteTodoController = async (req,res) => {
+  try {
+    const params = req.params
+    const DeletedTodo = await Todo.findByIdAndDelete(params.id,req.body)
+    res.status(200).json({data:DeletedTodo})
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const GetTodoByIdController = async (req,res) => {
+  try {
+    const todo = await Todo.findById(req.params.id)
+    res.status(200).json({data:todo})
+    
+  } catch (error) {
+    console.log(error);
+  }
+}

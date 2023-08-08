@@ -23,7 +23,7 @@ const AddTodo = () => {
             formData.append('title',data.title)
             formData.append('description',data.description)
             formData.append('img',todoFile ? todoFile[0] : '')
-            console.log(data,todoFile);
+            console.log(data,todoFile,formData);
             AddTodoService(formData)
         })}>
         <input {...register("title")} placeholder="title" type="text" />
