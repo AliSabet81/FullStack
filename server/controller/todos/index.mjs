@@ -20,7 +20,7 @@ export const AddTodoController = async (req, res) => {
     });
     await todo.save();
     res.status(201).json({
-      msg: "success",
+      msg: "successfull",
     });
   } catch (err) {
     console.log(err);
