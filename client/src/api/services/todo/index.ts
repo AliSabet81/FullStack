@@ -2,6 +2,7 @@ import { instance } from "@/api/constants";
 import Cookies from "js-cookie";
 
 export type TodoType = {
+  data(data: any): unknown;
   img?: string;
   title: string;
   description: string;
@@ -14,7 +15,7 @@ export const AddTodoService = async (data: any) => {
 };
 
 export const GetTodoService = async (): Promise<TodoType[]> => {
-  const res = await instance.get("/todos", {
+  const res = await instance.get("/todos?pageNumber=1?pageSize=2", {
     headers: {
       Authorization: Cookies.get("token"),
     },
@@ -34,5 +35,10 @@ export const UpdateTodoService = async (id: string, data: any) => {
 
 export const DeleteTodoService = async (id: string) => {
   const res = await instance.delete(`/todos/delete/${id}`);
+  return res.data;
+};
+
+export const SearchTodoService = async (keyword: string) => {
+  const res = await instance.get(`/todos/search/${keyword}`);
   return res.data;
 };

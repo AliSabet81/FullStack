@@ -1,7 +1,6 @@
 import sharp from "sharp";
 import appRootPath from "app-root-path";
 import { Todo } from "../../models/todos/index.mjs";
-
 export const AddTodoController = async (req, res) => {
   console.log(req.files);
   try {
@@ -21,51 +20,65 @@ export const AddTodoController = async (req, res) => {
     });
     await todo.save();
     res.status(201).json({
-      msg:"success"
-    })
+      msg: "successfull",
+    });
   } catch (err) {
     console.log(err);
   }
 };
 
-export const GetTodoController = async (req,res) => {
+export const GetTodoController = async (req, res) => {
   try {
+    const pageNumber = req.query.pageNumber || 1;
+    const pageSize = req.query.pageSize || 2;
     const todos = await Todo.find()
-    res.status(200).json({data:todos})
-    
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize);
+    res.status(200).json({ data: todos });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const UpdateTodoController = async (req,res) => {
+export const UpdateTodoController = async (req, res) => {
   try {
-    const params = req.params
-    const UpdatedTodo = await Todo.findByIdAndUpdate(params.id,req.body)
-    res.status(200).json({data:UpdatedTodo})
-    
+    const params = req.params;
+    const UpdatedTodo = await Todo.findByIdAndUpdate(params.id, req.body);
+    res.status(200).json({ data: UpdatedTodo });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const DeleteTodoController = async (req,res) => {
+export const DeleteTodoController = async (req, res) => {
   try {
-    const params = req.params
-    const DeletedTodo = await Todo.findByIdAndDelete(params.id,req.body)
-    res.status(200).json({data:DeletedTodo})
-    
+    const params = req.params;
+    const DeletedTodo = await Todo.findByIdAndDelete(params.id, req.body);
+    res.status(200).json({ data: DeletedTodo });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const GetTodoByIdController = async (req,res) => {
+export const GetTodoByIdController = async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id)
-    res.status(200).json({data:todo})
-    
+    const todo = await Todo.findById(req.params.id);
+    res.status(200).json({ data: todo });
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+export const HandleSeachController = async (req, res) => {
+  try {
+    const params = req.params;
+    const searchTodo = await Todo.find({
+      title: {
+        $regex: params.keyword
+      },
+    });
+    res.status(200).json({ data: searchTodo });
+  } catch (error) {
+    console.log(error);
+  }
+};
