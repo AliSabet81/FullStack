@@ -5,6 +5,7 @@ import {
   DeleteTodoController,
   GetTodoByIdController,
   GetTodoController,
+  HandleSeachController,
   UpdateTodoController,
 } from "../../controller/index.mjs";
 import { TodoSchema } from "../../models/index.mjs";
@@ -16,3 +17,4 @@ TodoRoutes.get("/", validateUser, GetTodoController);
 TodoRoutes.get("/:id", validateUser, GetTodoByIdController);
 TodoRoutes.put("/update/:id", validateUser, UpdateTodoController);
 TodoRoutes.delete("/delete/:id", validateUser, DeleteTodoController);
+TodoRoutes.get("/search/:keyword", validateUser, HandleSeachController);

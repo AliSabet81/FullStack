@@ -3,6 +3,7 @@ import {
   DeleteTodoService,
   GetSingleTodoService,
   GetTodoService,
+  SearchTodoService,
   TodoType,
   UpdateTodoService,
 } from "@/api/services/todo";
@@ -10,7 +11,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import debounce from "lodash.debounce";
 const EditTodoSchema = yup.object({
   title: yup.string(),
   description: yup.string(),
@@ -19,6 +20,7 @@ const EditTodoSchema = yup.object({
 const AddTodo = () => {
   const [todoList, setTodoList] = useState<[]>([]);
   const [updatedTodo, setUpdatedTodo] = useState<string | null>(null);
+  const [seachValue, setSeachValue] = useState<string | null>(null);
 
   const { register, handleSubmit, reset } = useForm<any>({
     resolver: yupResolver(EditTodoSchema),
@@ -45,10 +47,15 @@ const AddTodo = () => {
   useMemo(async () => {
     if (updatedTodo) {
       const res = await GetSingleTodoService(updatedTodo);
-      reset(res);
+      reset(res?.data);
     }
   }, [reset, updatedTodo]);
-
+  useMemo(() => {
+    seachValue &&
+      SearchTodoService(seachValue).then((res) => {
+        setTodoList(res.data);
+      });
+  }, [seachValue]);
   return (
     <>
       {!!updatedTodo ? (
@@ -63,6 +70,15 @@ const AddTodo = () => {
         </form>
       ) : null}
       <hr />
+      <input
+        type="search"
+        placeholder="search"
+        onChange={(e) => {
+          setTimeout(() => {
+            setSeachValue(e.target.value);
+          }, 1000);
+        }}
+      />
       <ul
         className={`flex min-h-screen flex-col items-center justify-between p-24`}>
         {todoList?.map((todo: any) => (
@@ -73,9 +89,9 @@ const AddTodo = () => {
             <button onClick={() => setUpdatedTodo(todo._id)}>Edit</button>
             <br />
             <button
-              onClick={async() => {
+              onClick={async () => {
                 await DeleteTodoService(todo._id);
-                fetchTodoList()
+                fetchTodoList();
               }}>
               Delete
             </button>

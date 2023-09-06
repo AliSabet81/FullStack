@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import * as yup from "yup";
+import mongoosePaginate from 'mongoose-paginate'
 
 export const TodoSchema = yup.object({
   body: yup.object({
@@ -21,5 +22,5 @@ const TodosSchema = new Schema({
     default: new Date(),
   },
 });
-
+TodosSchema.plugin(mongoosePaginate)
 export const Todo = mongoose.model("Todo", TodosSchema);
